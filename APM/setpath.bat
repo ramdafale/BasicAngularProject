@@ -1,0 +1,1 @@
+set PATH=%PATH%;C:\Users\%USERNAME%\AppData\Roaming\npm;
