@@ -1,18 +1,39 @@
 import { Component } from '@angular/core';
+import { IProduct } from './product';
 
 
 @Component({
 selector: 'pm-products',
-templateUrl : './product-list.component.html'
+templateUrl : './product-list.component.html',
+styleUrls : ['./product-list.component.css'] 
 
 })
  
 
 export class ProductListComponent{
 
-pageTitle : String ="Product List";     
-products123: any[] = [
-    {
+pageTitle : String ="Product List";   
+imageWidth : number =50;
+imageMargin : number=2;  
+showImage:boolean = false;
+_listFilter: string ;
+  filteredProducts: IProduct[];
+
+get listFilter(): string{
+
+    return this._listFilter;
+
+}
+set listFilter(value:string){
+  this._listFilter=value;
+  this.filteredProducts=this.listFilter ?   this.performFilter(this.listFilter) : this.products123;
+}
+
+
+
+
+products123: IProduct[] = [
+    { 
       "productId": 1,
       "productName": "Leaf Rake",
       "productCode": "GDN-0011",
@@ -33,4 +54,30 @@ products123: any[] = [
       "imageUrl": "https://openclipart.org/image/300px/svg_to_png/58471/garden_cart.png"
     }
   ];
+
+  toggleImage(): void {
+    this.showImage = !this.showImage;
+  }
+  ngOnInit(): void{
+
+    console.log("In OnInit");
+  }
+
+//set defaluts values to filter box
+
+constructor(){
+  this.filteredProducts=this.products123;
+  this.listFilter='cart';
+}
+
+
+  performFilter( filterByValueFromTextBox:string) : IProduct[]{
+
+    filterByValueFromTextBox =filterByValueFromTextBox.toLocaleLowerCase();
+    return this.products123.filter((product : IProduct )  =>
+       product.productName.toLocaleLowerCase().indexOf(filterByValueFromTextBox) !== -1 )
+      
+  }
+
+
 }
